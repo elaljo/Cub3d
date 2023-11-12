@@ -6,11 +6,11 @@
 /*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/07 15:20:31 by moelalj           #+#    #+#             */
-/*   Updated: 2023/03/03 15:08:29 by moelalj          ###   ########.fr       */
+/*   Updated: 2023/11/09 19:18:06 by moelalj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 char	*ftt_strcpy(char *dst, char *src)
 {
@@ -24,7 +24,6 @@ char	*ftt_strcpy(char *dst, char *src)
 	}
 	return (dst);
 }
-
 char	*ftt_strjoin(char *s1, char *s2)
 {
 	char	*str;

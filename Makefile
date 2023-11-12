@@ -6,7 +6,7 @@
 #    By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 23:15:39 by mbelouar          #+#    #+#              #
-#    Updated: 2023/11/07 01:09:54 by mbelouar         ###   ########.fr        #
+#    Updated: 2023/11/09 21:48:01 by mbelouar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,13 +29,24 @@ RM = rm -f
 
 INCLUDE = -L libft -lft
 
-SRC = main.c\
+SRC =		main.c \
 			elalj/errors.c\
+			elalj/read_map.c\
 			elalj/parsing.c\
-			elalj/split.c\
-			elalj/get_next_line.c\
-			elalj/get_next_line_utils.c\
-		
+			elalj/ft_split.c\
+			elalj/gnl/get_next_line.c\
+			elalj/gnl/get_next_line_utils.c\
+			elalj/directions/check_directions.c\
+			elalj/directions/init_directions.c\
+			elalj/directions/err_directions.c\
+			elalj/directions/check_needs_directions.c\
+			elalj/directions/check_color_f.c\
+			elalj/directions/check_color_c.c\
+			mbelouar/srcs/ft_errors.c \
+			mbelouar/srcs/init.c \
+			mbelouar/srcs/mlx_hooks.c \
+			mbelouar/srcs/colors.c \
+
 OBJS := $(SRC:.c=.o)
 
 %.o: %.c
@@ -48,7 +59,7 @@ $(NAME): $(OBJS)
 	@echo "$(YELLOW)Linking...⏳$(RESET)"
 	@make -C libft
 	@$(CC) $(CFLAGS) $(MLX_FLAGS) -o $(NAME) $(OBJS) $(INCLUDE)
-	@echo "$(GREEN)Compilation completed✅$(RESET)"
+	@echo "$(GREEN)Compilation completed ✅$(RESET)"
 
 clean:
 	@$(RM) $(OBJS)

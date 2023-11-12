@@ -12,49 +12,13 @@
 
 #include "../cub3d.h"
 
-void	read_map(int fd, t_data *data)
+int	map_valid(t_data *data, int fd)
 {
-	char *fullmap;
-	char *line;
-
-	fullmap = NULL;
-	line = get_next_line(fd);
-	if (line == NULL)
-		print_and_exit(NULL);
-	while (line != NULL)
-	{
-		fullmap = ftt_strjoin(fullmap, line);
-		free(line);
-		line = NULL;
-		line = get_next_line(fd);
-	}
-	data->map.str = ftt_split(fullmap, '\n');
-	free(fullmap);
-	fullmap = NULL;
-}
-
-void	find_cor_player(t_data *data)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	while (data->map.str[x])
-	{
-		y = 0;
-		while (data->map.str[y])
-		{
-			if (data->map.str[x][y] == 'N'
-				|| data->map.str[x][y] == 'S'
-				|| data->map.str[x][y] == 'E'
-				|| data->map.str[x][y] == 'W')
-			{
-				data->map.x = x;
-				data->map.y = y;
-				return ;
-			}
-			y++;
-		}
-		x++;
-	}
+	read_map(data, fd);
+	check_valid_directions(data);
+	init_directions(data);
+	check_directions_needs(data);
+	check_colors(data);
+	init_map(data);
+	return (1);
 }

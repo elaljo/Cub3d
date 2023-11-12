@@ -6,11 +6,11 @@
 /*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:42:46 by moelalj           #+#    #+#             */
-/*   Updated: 2023/11/07 14:44:25 by moelalj          ###   ########.fr       */
+/*   Updated: 2023/11/09 19:17:15 by moelalj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 char	*copy_to_xyata(char *str)
 {
@@ -108,7 +108,7 @@ char	*get_next_line(int fd)
 	}
 	line = cut(saved);
 	saved = copy_to_xyata(saved);
-	if (line[0] == '\n')
-		free(saved);
+	//if (line[0] == '\n')
+	//	free(saved);
 	return (line);
 }
