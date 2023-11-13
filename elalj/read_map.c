@@ -12,10 +12,41 @@
 
 #include "../cub3d.h"
 
+char	*remtabs(char *line)
+{
+	int		i;
+	int		c;
+	char	*dest;
+
+	i = 0;
+	c = 0;
+	while (line[i])
+	{
+		if (line[i] == '\t')
+			c++;
+		i++;
+	}
+	dest = (char *)ft_calloc(ft_strlen(line) - c, sizeof(char));
+	if (!dest)
+		return (NULL);
+	i = 0;
+	c = 0;
+	while (line[i])
+	{
+		if (line[i] != '\t')
+		{
+			dest[c] = line[i];
+			c++;
+		}
+		i++;
+	}
+	dest[c] = '\0';
+	return (dest);
+}
 void	init_map(t_data *data)
 {
 	int	columns;
-	int rows;
+	int	i;
 
 	columns = 0;
 	while (data->map_info.str[columns])
@@ -24,14 +55,14 @@ void	init_map(t_data *data)
 	if (!data->map_info.map)
 		return ;
 	columns = 6;
-	rows = 0;
-	while (data->map_info.str[columns][rows])
+	i = 0;
+	while (data->map_info.str[columns])
 	{
-		while (data->map_info.str[columns][rows] == '\t')
-			rows++;
-		data->map_info
-		rows++;
+		data->map_info.map[i] =	ft_strdup(remtabs(data->map_info.str[columns]));
+		i++;
+		columns++;
 	}
+	data->map_info.map[i] = NULL;
 }
 void	read_map(t_data *data, int fd)
 {
