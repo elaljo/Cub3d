@@ -42,6 +42,8 @@ SRC =		main.c \
 			elalj/directions/check_needs_directions.c\
 			elalj/directions/check_color_f.c\
 			elalj/directions/check_color_c.c\
+			elalj/map/check_map.c\
+			elalj/map/errors_map.c\
 			mbelouar/srcs/ft_errors.c \
 			mbelouar/srcs/init.c \
 			mbelouar/srcs/mlx_hooks.c \

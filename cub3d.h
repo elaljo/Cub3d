@@ -48,6 +48,7 @@ typedef struct s_map {
     int             snew_x;
     int             snew_y;
     char            **str;
+    int             columns;
 }				t_map;
 
 typedef struct s_ray {
@@ -164,7 +165,7 @@ void	plot_point(t_data *data, int x, int y, int color);
 // >--------<
 //parsing
 void	read_map(t_data *data, int fd);
-int     map_valid(t_data *data, int fd);
+int     map_valid(t_data *data, int fd, char *file);
 //split
 char	**ftt_split(char const *s, char c);
 int	    count_chars(char const *s, char delimiter, int lens);
@@ -197,6 +198,17 @@ void    check_consecutive_semicolon_c(t_data *data);
 void	valid_box_color_c(t_data *data);
 void	valid_color_c(t_data *data);
 void	init_map(t_data *data);
+void    check_map(t_data *data);
+void	found_tab_inside(t_data *data);
+void    check_extension_map(char *file);
+void	extension_err(void);
+void	only_valid_characters(t_data *data);
+void    check_surr_by_walls(t_data *data);
+void	not_surr_err(void);
+void	check_around_spaces(t_data *data);
+void	around_spaces_err(void);
+
+
 
 //errors
 void	check_fd_map(int *fd, char *file);

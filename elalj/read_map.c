@@ -12,58 +12,46 @@
 
 #include "../cub3d.h"
 
-char	*remtabs(char *line)
-{
-	int		i;
-	int		c;
-	char	*dest;
-
-	i = 0;
-	c = 0;
-	while (line[i])
-	{
-		if (line[i] == '\t')
-			c++;
-		i++;
-	}
-	dest = (char *)ft_calloc(ft_strlen(line) - c, sizeof(char));
-	if (!dest)
-		return (NULL);
-	i = 0;
-	c = 0;
-	while (line[i])
-	{
-		if (line[i] != '\t')
-		{
-			dest[c] = line[i];
-			c++;
-		}
-		i++;
-	}
-	dest[c] = '\0';
-	return (dest);
-}
 void	init_map(t_data *data)
 {
-	int	columns;
 	int	i;
-
-	columns = 0;
-	while (data->map_info.str[columns])
-		columns++;
-	data->map_info.map = malloc(sizeof(char *) * columns - 6);
+	int	columns;
+	
+	data->map_info.columns = 0;
+	while (data->map_info.str[data->map_info.columns])
+		data->map_info.columns++;
+	data->map_info.map = malloc(sizeof(char *) * data->map_info.columns - 6);
 	if (!data->map_info.map)
 		return ;
 	columns = 6;
 	i = 0;
 	while (data->map_info.str[columns])
 	{
-		data->map_info.map[i] =	ft_strdup(remtabs(data->map_info.str[columns]));
+		data->map_info.map[i] =	ft_strdup(data->map_info.str[columns]);
 		i++;
 		columns++;
 	}
 	data->map_info.map[i] = NULL;
 }
+
+void	check_extension_map(char *file)
+{
+	int		i;
+
+	i = 0;
+	while (file[i])
+		i++;
+	i--;
+	if (file[i] != 'b')
+		extension_err();
+	if (file[i - 1] != 'u')
+		extension_err();
+	if (file[i - 2] != 'c')
+		extension_err();
+	if (file[i - 3] != '.')
+		extension_err();
+}
+
 void	read_map(t_data *data, int fd)
 {
 	char *fullmap;

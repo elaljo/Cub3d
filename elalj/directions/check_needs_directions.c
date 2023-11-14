@@ -67,10 +67,23 @@ void	check_F_n(t_data *data)
 void	check_C_n(t_data *data)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (data->dir.C[i])
 		i++;
 	if (i != 2)
 		print_err_needs_directions();
+	j = 0;
+	while(data->dir.C[1][i])
+	{
+		if (data->dir.C[1][i] == ',')
+			j++;
+		i++;
+	}
+	if (j != 2)
+	{
+		ft_putstr_fd("found more/less semicolons", 2);
+		exit (1);
+	}
 }

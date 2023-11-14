@@ -21,7 +21,7 @@ int main(int ac, char **av)
 	if (ac != 2)
 		print_and_exit_param();
 	check_fd_map(&fd, av[1]);
-	if (map_valid(&data, fd))
+	if (map_valid(&data, fd, av[1]))
 	{
 		ft_init_data(&data);
 		mlx_hook(data.win_ptr, 17, 0, &ft_close, &data);

@@ -23,7 +23,8 @@ void	check_C_c(t_data *data)
 void	check_consecutive_semicolon_c(t_data *data)
 {
 	int	i;
-
+	int	j;
+	
 	i = 0;
 	while (data->dir.C[1][i])
 	{
@@ -37,6 +38,19 @@ void	check_consecutive_semicolon_c(t_data *data)
 			}
 		}
 		i++;
+	}
+	i = 0;
+	j = 0;
+	while(data->dir.F[1][i])
+	{
+		if (data->dir.F[1][i] == ',')
+			j++;
+		i++;
+	}
+	if (j != 2)
+	{
+		ft_putstr_fd("found more/less semicolons", 2);
+		exit (1);
 	}
 }
 void	valid_box_color_c(t_data *data)
