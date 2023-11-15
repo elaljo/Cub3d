@@ -58,7 +58,21 @@ void	only_valid_characters(t_data *data)
 		i++;
 	}
 }
+int	strchrr(char *line, char c)
+{
+	int		i;
 
+	if (!line)
+		return (0);
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 void	check_surr_by_walls(t_data *data)
 {
 	int	i;
@@ -66,21 +80,21 @@ void	check_surr_by_walls(t_data *data)
 	char *str;
 
 	i = 1;
-	if (ft_strchr(data->map_info.map[0], '0'))
+	if (strchrr(data->map_info.map[0], '1'))
 		not_surr_err();
 	while (data->map_info.map[i])
 	{
 		str = ft_strdup(data->map_info.map[i]);
 		str = ft_strtrim(str, "\t");
 		len = ftt_strlen(str);
-		if (!ft_strncmp(str, "0", 1))
+		if (ft_strncmp(str, "1", 1))
 			not_surr_err();
-		if (str[len - 1] == '0')
+		if (str[len - 1] != '1')
 			not_surr_err();
 		free(str);
 		i++;
 	}
-	if (ft_strchr(data->map_info.map[i - 1], '0'))
+	if (strchrr(data->map_info.map[i - 1], '1'))
 		not_surr_err();
 }
 void	check_around_spaces(t_data *data)
@@ -105,21 +119,55 @@ void	check_around_spaces(t_data *data)
 		j = 0;
 		while (str[i][j])
 		{
-			if (str[i][j] == ' ')
-			{
-				if (str[i - 1][j] != '1' || str[i + 1][j] != '1'
-					|| str[i][j - 1] != '1' || str[i][j + 1] != '1')
+			if (str[0][j] == ' ')
+				if (str[1][j] != '1' && str[1][j] != ' ')
 					around_spaces_err();
+			if (str[i + 1] == NULL && str[i][j] == ' ')
+				if (str[i - 1][j] != '1' && str[i - 1][j] != ' ')
+					around_spaces_err();
+			if (str[i][j] == ' ' && i != 0 && str[i + 1])
+			{
+				if ((str[i - 1][j] != '1' && str[i - 1][j] != ' ')
+					|| (str[i + 1][j] != '1' && str[i + 1][j] != ' ')
+					|| (str[i][j - 1] != '1' && str[i][j - 1] != ' ')
+					|| (str[i][j + 1] != '1' && str[i][j + 1] != ' '))
+						around_spaces_err();
 			}
 			j++;
 		}
 		i++;
 	}
 }
+void	check_if_double_directions(t_data *data)
+{
+	int	i;
+	int	c;
+	int	j;
+
+	c = 0;
+	i = 0;
+	while (data->map_info.map[i])
+	{
+		j = 0;
+		while (data->map_info.map[i][j])
+		{
+			if (data->map_info.map[i][j] == 'N' || data->map_info.map[i][j] == 'S'
+				|| data->map_info.map[i][j] == 'W' || data->map_info.map[i][j] == 'E')
+				c++;
+			j++;
+		}
+		i++;
+	}
+	if (c == 0)
+		non_directions_err();
+	if (c != 1)
+		double_directions_err();
+}
 void	check_map(t_data *data)
 {
 	found_tab_inside(data);
 	only_valid_characters(data);
+	check_if_double_directions(data);
 	check_surr_by_walls(data);
 	check_around_spaces(data);
 }

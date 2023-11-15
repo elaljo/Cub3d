@@ -28,3 +28,13 @@ void	around_spaces_err(void)
 	ft_putstr_fd("Error:\n  ->Player can suicide :)\n", 2);
 	exit (1);
 }
+void	double_directions_err(void)
+{
+	ft_putstr_fd("Error:\n  ->Found double directions><\n", 2);
+	exit (1);
+}
+void	non_directions_err(void)
+{
+	ft_putstr_fd("Error:\n  ->can not found the spawning orientation/player", 2);
+	exit (1);
+}

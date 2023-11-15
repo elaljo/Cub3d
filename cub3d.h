@@ -207,6 +207,9 @@ void    check_surr_by_walls(t_data *data);
 void	not_surr_err(void);
 void	check_around_spaces(t_data *data);
 void	around_spaces_err(void);
+void	check_if_double_directions(t_data *data);
+void	double_directions_err(void);
+void	non_directions_err(void);
 
 
 
