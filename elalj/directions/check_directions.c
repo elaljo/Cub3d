@@ -3,20 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   check_directions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 00:11:46 by moelalj           #+#    #+#             */
-/*   Updated: 2023/11/10 00:11:47 by moelalj          ###   ########.fr       */
+/*   Updated: 2023/11/16 16:53:40 by mbelouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-void	check_valid_directions(t_data *data)
+void	ft_f(t_data *data)
 {
-	data->c = 0;
 	int	i;
 
+	i = 0;
+	while (i < 6)
+	{
+		if (!ft_strncmp(data->map_info.str[i], "F", 1))
+			data->dir.F = ftt_split(data->map_info.str[i], ' ');
+		i++;
+	}
+}
+
+void	ft_c(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < 6)
+	{
+		if (!ft_strncmp(data->map_info.str[i], "C", 1))
+			data->dir.C = ftt_split(data->map_info.str[i], ' ');
+		i++;
+	}
+}
+
+void	check_valid_directions(t_data *data)
+{
+	int	i;
+
+	data->c = 0;
 	i = 0;
 	while (data->map_info.str[i])
 	{
@@ -37,17 +63,19 @@ void	check_valid_directions(t_data *data)
 	if (data->c != 6)
 		print_err_directions();
 }
+
 void	check_directions_needs(t_data *data)
 {
-	check_NO_n(data);
-	check_SO_n(data);
-	check_WE_n(data);
-	check_EA_n(data);
-	check_F_n(data);
-	check_C_n(data);
+	check_no_needs(data);
+	check_so_needs(data);
+	check_we_needs(data);
+	check_ea_needs(data);
+	check_f_needs(data);
+	check_c_needs(data);
 }
+
 void	check_colors(t_data *data)
 {
-	check_F_c(data);
-	check_C_c(data);
+	check_f_c(data);
+	check_c_c(data);
 }

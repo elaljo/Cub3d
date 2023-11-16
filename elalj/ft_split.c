@@ -6,7 +6,7 @@
 /*   By: moelalj <moelalj@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 19:33:39 by moelalj           #+#    #+#             */
-/*   Updated: 2023/11/09 20:51:56 by moelalj          ###   ########.fr       */
+/*   Updated: 2023/11/16 14:20:55 by moelalj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	count_words(char const *s, char delimiter)
 		if (s[i])
 		{
 			while (s[i] != delimiter && s[i])
-			i++;
+				i++;
 			count++;
 		}
 	}
@@ -73,4 +73,37 @@ char	**ftt_split(char const *s, char c)
 	}
 	str[k] = NULL;
 	return (str);
+}
+
+void	ft_str_free(char **s)
+{
+	int	i;
+
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		free(s[i]);
+		i++;
+	}
+	free(s);
+}
+
+int	strchrr(char *line, char c)
+{
+	int		i;
+
+	if (!line)
+		return (0);
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == ' ')
+			i++;
+		if (line[i] != c)
+			return (1);
+		i++;
+	}
+	return (0);
 }

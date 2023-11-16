@@ -6,14 +6,14 @@
 /*   By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 23:19:14 by mbelouar          #+#    #+#             */
-/*   Updated: 2023/11/10 17:15:56 by mbelouar         ###   ########.fr       */
+/*   Updated: 2023/11/16 16:52:15 by mbelouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <mlx.h>
+# include "MLX42.h"
 # include "libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
@@ -21,15 +21,14 @@
 # include <stdio.h>
 # include <math.h>
 
-# define LROTATE 123
-# define RROTATE 124
-# define FORWARD 13
-# define BACKWARDS 1
-# define LEFT 0
-# define RIGHT 2
+# define KEY_W 13
+# define KEY_S 1
+# define KEY_A 0
+# define KEY_D 2
 # define ESC 53
-# define WIDTH		800
-# define HEIGHT		600
+# define SPEED_MOVE 0.01
+# define WIDTH		2200
+# define HEIGHT		1200
 # define TITLE		"cub3D"
 
 typedef struct e_image {
@@ -41,10 +40,13 @@ typedef struct e_image {
 }				t_image;
 
 typedef struct s_map {
-	char			**map;
+	char		    **map;
+    char            **map_wt;
+    int             map_size;
 	int				map_width;
 	int				map_height;
-	char			snew_dir;
+    int             mapS;
+    char            snew_dir;
     int             snew_x;
     int             snew_y;
     char            **str;
@@ -52,74 +54,31 @@ typedef struct s_map {
 }				t_map;
 
 typedef struct s_ray {
-    // Player position
     double player_x;
     double player_y;
-
-    // Direction vector
+    double player_size;
     double direction_x;
     double direction_y;
-
-    // 2D camera plane
     double plane_x;
     double plane_y;
-
-    // Camera plane increment for calculating ray direction
     double camera;
-
-    // Ray direction vector
     double ray_vect_x;
     double ray_vect_y;
-
-    // Map grid position
     int x_map;
     int y_map;
-
-    // Length of ray from current position to next x or y-side
     double x_dist;
     double y_dist;
-
-    // Length of ray from one x or y-side to next x or y-side
     double delta_dist_x;
     double delta_dist_y;
-
-    // Perpendicular distance from the camera to the wall, used for wall height calculation
     double wall_dist;
-
-    // Step direction (either +1 or -1) in x and y
     int step_x;
     int step_y;
-
-    // Flag indicating whether a wall is touched
     int touch;
-
-    // Flag indicating which face of the wall was touched (0 for x-side, 1 for y-side) NS or EW
     int face_touched;
-
-    // Size of each step (pixel) for drawing the walls
     double step_size;
-
-    // Constant value for converting degrees to radians
-    double const_rad;
-
-    // Height of the line to be drawn on the screen
     int wall_height;
-
-    // Start and end points for drawing the wall slice on the screen
-    int draw_start;
-    int draw_end;
-
-    // Relative position of the wall hit, used for texture mapping
-    double wall_x;
-
-    // Movement flags for player control
-    int forward;
-    int backwards;
-    int left;
-    int right;
-    int r_left;
-    int r_right;
 }				t_ray;
+
 typedef struct s_dir{
     char    **NO;
     char    **SO;
@@ -130,6 +89,7 @@ typedef struct s_dir{
     char    **C;
     char    **clr_c;
 }t_dir;
+
 typedef struct s_data {
 	t_image			image;
 	t_ray			ray;
@@ -137,8 +97,6 @@ typedef struct s_data {
     t_dir           dir;
 	void			*mlx_ptr;
 	void			*win_ptr;
-	double			width;
-	double			height;
     double          r_angle;
     int             c;
 }				t_data;
@@ -152,15 +110,30 @@ int     init_player_direction(t_data *data);
 // error functions
 void	err_msg(char *str, int fd);
 void	print_and_exit_param(void);
+void	open_fd_check(int *fd, char *file);
 
 // mlx hooks
 int		ft_close(t_data *data);
 int		esc_handle(int keycode, t_data *data);
-int     handle_hook(int keycode, t_data *data);
-int     handle_move(t_data *data);
+void    handle_moves(void *param);
+void    setup_rot_angle(t_data *data);
 
-//colors
+// colors
 void	plot_point(t_data *data, int x, int y, int color);
+int     generate_color(int r, int g, int b, int a);
+
+// moves
+void	ft_move_up(t_data *data);
+void	ft_move_down(t_data *data);
+void	ft_move_right(t_data *data);
+void	ft_move_left(t_data *data);
+int     valid_move(t_data *data, double x, double y);
+
+// drawing
+void    drawing(t_data * data);
+void    draw_map2D(t_data *data);
+void    draw_carre(int color, double top, double left, t_data *data);
+void    draw_player(double player_x, double player_y, t_data *data);
 
 // >--------<
 //parsing
@@ -174,30 +147,32 @@ int	    count_words(char const *s, char delimiter);
 void	check_valid_directions(t_data *data);
 void	print_err_directions();
 void	init_directions(t_data *data);
-void	NO(t_data *data);
-void	SO(t_data *data);
-void	WE(t_data *data);
-void	EA(t_data *data);
-void	F(t_data *data);
-void	C(t_data *data);
+void	ft_no(t_data *data);
+void	ft_so(t_data *data);
+void	ft_we(t_data *data);
+void	ft_ea(t_data *data);
+void	ft_f(t_data *data);
+void	ft_c(t_data *data);
 void	check_directions_needs(t_data *data);
-void    check_NO_n(t_data *data);
-void	check_SO_n(t_data *data);
-void	check_WE_n(t_data *data);
-void	check_EA_n(t_data *data);
-void	check_F_n(t_data *data);
-void    check_C_n(t_data *data);
+void    check_no_needs(t_data *data);
+void	check_so_needs(t_data *data);
+void	check_we_needs(t_data *data);
+void	check_ea_needs(t_data *data);
+void	check_f_needs(t_data *data);
+void    check_c_needs(t_data *data);
 void	print_err_needs_directions();
 void	check_colors(t_data *data);
-void    check_F_c(t_data *data);
+void    check_f_c(t_data *data);
 void    check_consecutive_semicolon_f(t_data *data);
 void	valid_box_color_f(t_data *data);
 void	valid_color_f(t_data *data);
-void    check_C_c(t_data *data);
+void    check_c_c(t_data *data);
 void    check_consecutive_semicolon_c(t_data *data);
 void	valid_box_color_c(t_data *data);
 void	valid_color_c(t_data *data);
+void	init_maps(t_data *data);
 void	init_map(t_data *data);
+void	init_map_wt(t_data *data);
 void    check_map(t_data *data);
 void	found_tab_inside(t_data *data);
 void    check_extension_map(char *file);
@@ -206,17 +181,19 @@ void	only_valid_characters(t_data *data);
 void    check_surr_by_walls(t_data *data);
 void	not_surr_err(void);
 void	check_around_spaces(t_data *data);
+void    start_checking_around_spaces(char **str);
+void    ch_inside_map(char **str, int i, int j);
 void	around_spaces_err(void);
 void	check_if_double_directions(t_data *data);
 void	double_directions_err(void);
 void	non_directions_err(void);
 
-
-
 //errors
 void	check_fd_map(int *fd, char *file);
 void	print_and_exit_param(void);
 void	err_empty_map(void);
+void	found_semicolon_err(void);
+void    err_semicolons(void);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1337
 //gnl
@@ -229,8 +206,10 @@ char	*ftt_strcpy(char *dst, char *src);
 char	*ftt_strjoin(char *s1, char *s2);
 char	*ftt_strchr(const char *s, int c);
 size_t	ftt_strlen(const char *s);
-// directions
-
+// free
+void	ft_str_free(char **s);
+int     strchrr(char *line, char c);
 
 # endif
 #endif
+

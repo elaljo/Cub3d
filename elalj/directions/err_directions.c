@@ -12,41 +12,26 @@
 
 #include "../../cub3d.h"
 
-void	print_err_NO()
+void	print_err_directions(void)
 {
-	ft_putstr_fd("Attention! Error with some of directions in map", 2);
-	ft_putstr_fd(" <NORTH>", 2);
+	ft_putstr_fd("Eroor:\n  ->Found double/missing direction in map", 2);
 	exit (1);
 }
 
-void	print_err_SO()
+void	print_err_needs_directions(void)
 {
-	ft_putstr_fd("Attention! Error with some of directions in map", 2);
-	ft_putstr_fd(" <SOUTH>", 2);
+	ft_putstr_fd("Error:\n  ->invalid direction-> more/less needs", 2);
 	exit (1);
 }
 
-void	print_err_WE()
+void	found_semicolon_err(void)
 {
-	ft_putstr_fd("Attention! Error with some of directions in map", 2);
-	ft_putstr_fd(" <WEST>", 2);
+	ft_putstr_fd("Error:\n  ->found(,)near to itself", 2);
 	exit (1);
 }
 
-void	print_err_EA()
+void	err_semicolons(void)
 {
-	ft_putstr_fd("Attention! Error with some of directions in map", 2);
-	ft_putstr_fd(" <EAST>", 2);
-	exit (1);
-}
-
-void	print_err_directions()
-{
-	ft_putstr_fd("Found double/missing direction in map", 2);
-	exit (1);
-}
-void	print_err_needs_directions()
-{
-	ft_putstr_fd("invalid direction-> more/less needs", 2);
+	ft_putstr_fd("Error:\n  ->found more/less semicolons", 2);
 	exit (1);
 }
