@@ -187,6 +187,8 @@ void	around_spaces_err(void);
 void	check_if_double_directions(t_data *data);
 void	double_directions_err(void);
 void	non_directions_err(void);
+void	check_if_play_can_go_bg(t_data *data);
+int     found_last_0(char *line);
 
 //errors
 void	check_fd_map(int *fd, char *file);

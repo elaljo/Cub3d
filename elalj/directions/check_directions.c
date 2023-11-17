@@ -40,26 +40,19 @@ void	ft_c(t_data *data)
 
 void	check_valid_directions(t_data *data)
 {
-	int	i;
-
 	data->c = 0;
-	i = 0;
-	while (data->map_info.str[i])
-	{
-		if (!ft_strncmp(data->map_info.str[i], "NO ", 3))
-			data->c++;
-		else if (!ft_strncmp(data->map_info.str[i], "SO ", 3))
-			data->c++;
-		else if (!ft_strncmp(data->map_info.str[i], "WE ", 3))
-			data->c++;
-		else if (!ft_strncmp(data->map_info.str[i], "EA ", 3))
-			data->c++;
-		else if (!ft_strncmp(data->map_info.str[i], "F ", 2))
-			data->c++;
-		else if (!ft_strncmp(data->map_info.str[i], "C ", 2))
-			data->c++;
-		i++;
-	}
+	if (!ft_strcmp(data->dir.NO[0], "NO"))
+		data->c++;
+	else if (!ft_strcmp(data->dir.SO[0], "SO"))
+		data->c++;
+	else if (!ft_strcmp(data->dir.WE[0], "WE"))
+		data->c++;
+	else if (!ft_strcmp(data->dir.EA[0], "EA"))
+		data->c++;
+	else if (!ft_strcmp(data->dir.F[0], "F"))
+		data->c++;
+	else if (!ft_strcmp(data->dir.C[0], "C"))
+		data->c++;
 	if (data->c != 6)
 		print_err_directions();
 }

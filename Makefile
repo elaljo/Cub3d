@@ -49,6 +49,7 @@ SRC =		main.c \
 			elalj/directions/check_color_f.c\
 			elalj/directions/check_color_c.c\
 			elalj/map/check_map.c\
+			elalj/map/check_map_2.c\
 			elalj/map/map_casses.c\
 			elalj/map/errors_map.c\
 			mbelouar/srcs/ft_errors.c \
