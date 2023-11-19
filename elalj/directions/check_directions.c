@@ -14,45 +14,61 @@
 
 void	ft_f(t_data *data)
 {
-	int	i;
+	int		i;
+	char	*str;
 
 	i = 0;
 	while (i < 6)
 	{
-		if (!ft_strncmp(data->map_info.str[i], "F", 1))
-			data->dir.F = ftt_split(data->map_info.str[i], ' ');
+		str = ftt_strtrim(data->map_info.str[i], "\t ");
+		if (!ft_strncmp(str, "F", 1))
+			data->dir.F = ftt_split(str, ' ');
+		free(str);
 		i++;
 	}
 }
 
 void	ft_c(t_data *data)
 {
-	int	i;
+	int		i;
+	char	*str;
 
 	i = 0;
 	while (i < 6)
 	{
-		if (!ft_strncmp(data->map_info.str[i], "C", 1))
-			data->dir.C = ftt_split(data->map_info.str[i], ' ');
+		str = ftt_strtrim(data->map_info.str[i], "\t ");
+		if (!ft_strncmp(str, "C", 1))
+			data->dir.C = ftt_split(str, ' ');
+		free(str);
 		i++;
 	}
 }
 
-void	check_valid_directions(t_data *data)
+void	check_many_directions(t_data *data)
 {
+	int		i;
+	char	*str;
+
 	data->c = 0;
-	if (!ft_strcmp(data->dir.NO[0], "NO"))
-		data->c++;
-	else if (!ft_strcmp(data->dir.SO[0], "SO"))
-		data->c++;
-	else if (!ft_strcmp(data->dir.WE[0], "WE"))
-		data->c++;
-	else if (!ft_strcmp(data->dir.EA[0], "EA"))
-		data->c++;
-	else if (!ft_strcmp(data->dir.F[0], "F"))
-		data->c++;
-	else if (!ft_strcmp(data->dir.C[0], "C"))
-		data->c++;
+	i = 0;
+	while (i < 6)
+	{
+		str = ftt_strtrim(data->map_info.str[i], "\t ");
+		if (!ft_strncmp(str, "NO", 2))
+			data->c++;
+		else if (!ft_strncmp(str, "SO", 2))
+			data->c++;
+		else if (!ft_strncmp(str, "WE", 2))
+			data->c++;
+		else if (!ft_strncmp(str, "EA", 2))
+			data->c++;
+		else if (!ft_strncmp(str, "F", 1))
+			data->c++;
+		else if (!ft_strncmp(str, "C", 1))
+			data->c++;
+		free(str);
+		i++;
+	}
 	if (data->c != 6)
 		print_err_directions();
 }

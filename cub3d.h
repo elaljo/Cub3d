@@ -143,8 +143,14 @@ int     map_valid(t_data *data, int fd, char *file);
 char	**ftt_split(char const *s, char c);
 int	    count_chars(char const *s, char delimiter, int lens);
 int	    count_words(char const *s, char delimiter);
+//trim
+char	*ftt_strtrim(char const *s1, char const *set);
+int	check_end(char const *s, char const *set);
+int	check_start(char const *s, char const *set);
+int	check(char ch, char const *set);
+
 //directions
-void	check_valid_directions(t_data *data);
+void	check_many_directions(t_data *data);
 void	print_err_directions();
 void	init_directions(t_data *data);
 void	ft_no(t_data *data);

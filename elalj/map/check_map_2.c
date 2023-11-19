@@ -34,7 +34,7 @@ void	check_if_play_can_go_bg(t_data *data)
 	int	i;
 	int	l_0;
 	int	p_len;
-	int n_len;
+	int	n_len;
 
 	i = 1;
 	while (data->map_info.map_wt[i])
@@ -46,7 +46,6 @@ void	check_if_play_can_go_bg(t_data *data)
 		if (l_0 >= p_len || l_0 >= n_len)
 		{
 			ft_putstr_fd("Error:\n  ->Player can go to bg\n", 2);
-	
 			exit (1);
 		}
 		i++;

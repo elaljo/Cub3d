@@ -40,6 +40,7 @@ SRC =		main.c \
 			elalj/read_map.c\
 			elalj/parsing.c\
 			elalj/ft_split.c\
+			elalj/ftt_strtrim.c\
 			elalj/gnl/get_next_line.c\
 			elalj/gnl/get_next_line_utils.c\
 			elalj/directions/check_directions.c\
