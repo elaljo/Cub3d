@@ -6,7 +6,7 @@
 /*   By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 23:19:14 by mbelouar          #+#    #+#             */
-/*   Updated: 2023/11/16 16:52:15 by mbelouar         ###   ########.fr       */
+/*   Updated: 2023/11/23 22:17:50 by mbelouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,13 @@
 # include <stdio.h>
 # include <math.h>
 
-# define KEY_W 13
-# define KEY_S 1
-# define KEY_A 0
-# define KEY_D 2
-# define ESC 53
-# define SPEED_MOVE 0.01
+# define FOV_ANGLE  60 * (M_PI / 180)
+# define SPEED_MOVE 1.50
 # define WIDTH		2200
-# define HEIGHT		1200
+# define HEIGHT		1000
 # define TITLE		"cub3D"
-
+# define INT_MAX 2147483647
+int			f_pid;
 typedef struct e_image {
 	void	*img;
 	char	*addr;
@@ -45,7 +42,7 @@ typedef struct s_map {
     int             map_size;
 	int				map_width;
 	int				map_height;
-    int             mapS;
+    int             square_S;
     char            snew_dir;
     int             snew_x;
     int             snew_y;
@@ -54,30 +51,41 @@ typedef struct s_map {
 }				t_map;
 
 typedef struct s_ray {
-    double player_x;
-    double player_y;
-    double player_size;
-    double direction_x;
-    double direction_y;
-    double plane_x;
-    double plane_y;
-    double camera;
-    double ray_vect_x;
-    double ray_vect_y;
-    int x_map;
-    int y_map;
-    double x_dist;
-    double y_dist;
-    double delta_dist_x;
-    double delta_dist_y;
-    double wall_dist;
-    int step_x;
-    int step_y;
-    int touch;
-    int face_touched;
-    double step_size;
-    int wall_height;
+    double  rayAngle;
+    double  wallHit_x;
+    double  wallHit_y;
+    double  distance;
+    int     wasHitVertical;
 }				t_ray;
+
+typedef struct s_projection {
+    double  dist_projec;
+    double  projWall_height;
+    int     wall_Height;
+    int     wall_topPixel;
+    int     wall_bottomPixel;
+}               t_projection;
+
+typedef struct s_holder {
+    int     is_FaceUp;
+    int     is_FaceDown;
+    int     is_FaceRight;
+    int     is_FaceLeft;
+    int     foundHorz_hit;
+    int     foundVert_hit;
+	double  horzHit_x;
+	double  horzHit_y;
+	double  vertHit_x;
+	double  vertHit_y;
+    double  x_inter;
+    double  y_inter;
+	double  x_step;
+    double  y_step;
+    double  HorzNext_x;
+    double  HorzNext_y;
+    double  VertNext_x;
+    double  VertNext_y;
+}               t_holder;
 
 typedef struct s_dir{
     char    **NO;
@@ -90,17 +98,31 @@ typedef struct s_dir{
     char    **clr_c;
 }t_dir;
 
+typedef struct s_player {
+    double  _x;
+    double  _y;
+    double  p_size;
+}               t_player;
+
+
 typedef struct s_data {
 	t_image			image;
-	t_ray			ray;
+    t_player        player;
+	t_ray			*ray;
 	t_map			map_info;
     t_dir           dir;
+    t_holder        hold;
+    t_projection    project;
 	void			*mlx_ptr;
 	void			*win_ptr;
     double          r_angle;
     int             c;
+    double          x_tmp;
+    double          y_tmp;
+    unsigned int    *Color_buffer;
 }				t_data;
 
+// <========== RAYCASTING ==========>
 // initialize functions
 void	ft_init_data(t_data *data);
 void	ft_init_image(t_data *data);
@@ -116,11 +138,11 @@ void	open_fd_check(int *fd, char *file);
 int		ft_close(t_data *data);
 int		esc_handle(int keycode, t_data *data);
 void    handle_moves(void *param);
-void    setup_rot_angle(t_data *data);
 
 // colors
 void	plot_point(t_data *data, int x, int y, int color);
 int     generate_color(int r, int g, int b, int a);
+void    setup_rot_angle(t_data *data);
 
 // moves
 void	ft_move_up(t_data *data);
@@ -128,21 +150,39 @@ void	ft_move_down(t_data *data);
 void	ft_move_right(t_data *data);
 void	ft_move_left(t_data *data);
 int     valid_move(t_data *data, double x, double y);
+void    update_position(t_data *data, double x, double y);
 
 // drawing
 void    drawing(t_data * data);
 void    draw_map2D(t_data *data);
 void    draw_carre(int color, double top, double left, t_data *data);
 void    draw_player(double player_x, double player_y, t_data *data);
+void	draw_rays(t_data *data);
 
-// >--------<
-//parsing
+// raycast
+void	castAll_rays(t_data *data);
+void	cast_ray(t_data *data, int i);
+void	calculate_dis(t_data *data, int i);
+void	vert_inter(t_data *data, double ray_angle);
+int     is_wall(t_data *data, double x, double y);
+void	horz_inter(t_data *data, double ray_angle);
+void    ft_dda(t_data *data, int xi, int yi, int xf, int yf);
+void	draw_rays(t_data *data);
+
+// projection
+void	clearColor_buffer(t_data *data, unsigned int color);
+void	generate3D_projection(t_data *data);
+
+// <========== PARSING ==========>
+
 void	read_map(t_data *data, int fd);
 int     map_valid(t_data *data, int fd, char *file);
+
 //split
 char	**ftt_split(char const *s, char c);
 int	    count_chars(char const *s, char delimiter, int lens);
 int	    count_words(char const *s, char delimiter);
+
 //trim
 char	*ftt_strtrim(char const *s1, char const *set);
 int	check_end(char const *s, char const *set);
@@ -202,22 +242,26 @@ void	print_and_exit_param(void);
 void	err_empty_map(void);
 void	found_semicolon_err(void);
 void    err_semicolons(void);
-# ifndef BUFFER_SIZE
+
+#ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1337
+
 //gnl
 char	*get_next_line(int fd);
 char	*ft_read(char *all, int fd);
 char	*cut(char *str);
 char	*copy_to_xyata(char *str);
+
 //libft_needed
 char	*ftt_strcpy(char *dst, char *src);
 char	*ftt_strjoin(char *s1, char *s2);
 char	*ftt_strchr(const char *s, int c);
 size_t	ftt_strlen(const char *s);
+
 // free
 void	ft_str_free(char **s);
 int     strchrr(char *line, char c);
 
-# endif
+#endif
 #endif
 

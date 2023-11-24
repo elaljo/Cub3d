@@ -6,7 +6,7 @@
 #    By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/06 23:15:39 by mbelouar          #+#    #+#              #
-#    Updated: 2023/11/16 15:29:20 by mbelouar         ###   ########.fr        #
+#    Updated: 2023/11/23 22:40:12 by mbelouar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,15 +19,20 @@ RESET = \033[0m
 
 NAME = cub3d
 
-IMLX = -I /Users/$(USER)/MLX42/include/MLX42
+ IMLX = -I /Users/$(USER)/MLX42/include/MLX42
+ GLFW = -I include -lglfw -L"/Users/moelalj/.brew/opt/glfw/lib/"
+#IMLX = -I /Users/mbelouar/MLX42/include/MLX42
 
-GLFW = -I include -lglfw -L"/Users/moelalj/.brew/opt/glfw/lib/"
+#GLFW = -I include -lglfw -L"/goinfre/$(USER)/homebrew/opt/glfw/lib/"
 
 CC = cc
 
 MLX_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit
 
-AR_MLX = /Users/moelalj/MLX42/build/libmlx42.a
+#AR_MLX = /Users/mbelouar/MLX42/build/libmlx42.a
+ AR_MLX = /Users/moelalj/MLX42/build/libmlx42.a
+
+
 
 CFLAGS = -Wall -Werror -Wextra
 
@@ -59,6 +64,11 @@ SRC =		main.c \
 			mbelouar/srcs/colors.c \
 			mbelouar/srcs/draw.c \
 			mbelouar/srcs/moves.c \
+			mbelouar/srcs/raycast.c \
+			mbelouar/srcs/horz_inter.c \
+			mbelouar/srcs/vert_inter.c \
+			mbelouar/srcs/dda_algo.c \
+			mbelouar/srcs/projection.c \
 
 OBJS := $(SRC:.c=.o)
 
@@ -70,19 +80,19 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compiling cub3D...⏳$(RESET)"
 	@echo "$(YELLOW)Linking...⏳$(RESET)"
-	@make -C libft
-	@$(CC) $(CFLAGS) $(MLX_FLAGS) $(AR_MLX) $(IMLX) $(GLFW) -o $(NAME) $(OBJS) $(INCLUDE)
+	@make -s -C libft
+	@$(CC) $(CFLAGS) -fsanitize=address -g $(MLX_FLAGS) $(AR_MLX) $(IMLX) $(GLFW) -o $(NAME) $(OBJS) $(INCLUDE)
 	@echo "$(GREEN)Compilation completed ✅$(RESET)"
 
 clean:
 	@$(RM) $(OBJS)
 	@echo "$(RED)Deleting obj_files$(RESET)"
-	@make clean -C libft
+	@make clean -s -C libft
 
 fclean: clean
 	@$(RM) $(NAME)
 	@echo "$(RED)Deleting obj_files + ./cub3D$(RESET)"
-	@make fclean -C libft
+	@make fclean -s -C libft
 
 re: fclean all
 
