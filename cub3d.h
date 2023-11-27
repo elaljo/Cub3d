@@ -20,7 +20,6 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <math.h>
-
 # define FOV_ANGLE	60 * (M_PI / 180)
 # define SPEED_MOVE	1.50
 # define WIDTH		2200
@@ -112,7 +111,7 @@ typedef struct s_dir {
 	char	**F;
 	char	**clr_f;
 	int		floor[3];
-	int		celling[3];
+	int		ceiling[3];
 	char	**C;
 	char	**clr_c;
 }				t_dir;
@@ -157,7 +156,7 @@ void	open_fd_check(int *fd, char *file);
 
 // mlx hooks
 void	handle_moves(void *param);
-int		ft_close(t_data *data);
+//int		ft_close(t_data *data);
 int		esc_handle(int keycode, t_data *data);
 
 // colors

@@ -12,7 +12,16 @@
 
 #include "cub3d.h"
 
-int main(int ac, char **av)
+static void	ft_close(void	*param)
+{
+	t_data	*data;
+
+	data = (t_data *)param;
+	system("kill $(ps | grep afplay  | awk '{print $1}' | head -1)");
+	mlx_close_window(data->mlx_ptr);
+}
+
+int	main(int ac, char **av)
 {
 	t_data	data;
 	pid_t	f_pid;
@@ -27,11 +36,12 @@ int main(int ac, char **av)
 		f_pid = fork();
 		if (f_pid == 0)
 		{
-			system("afplay /Users/mbelouar/Desktop/cub3D/songs/ekambi_audio.mp3");
+			system("afplay /Users/$USER/Desktop/cub3D/songs/ekambi_audio.mp3");
 			exit (0);
 		}
 		ft_init_data(&data);
 		mlx_loop_hook(data.mlx_ptr, handle_moves, &data);
+		mlx_close_hook(data.mlx_ptr, ft_close, &data);
 		mlx_loop(data.mlx_ptr);
 	}
 	return (0);
