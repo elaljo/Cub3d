@@ -6,7 +6,7 @@
 /*   By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 23:19:14 by mbelouar          #+#    #+#             */
-/*   Updated: 2023/11/25 23:58:21 by mbelouar         ###   ########.fr       */
+/*   Updated: 2023/12/08 01:49:42 by mbelouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ typedef struct s_ray {
 	float	wallHit_y;
 	float	distance;
 	int		wasHitVertical;
+	int		wall_Height;
+	int 	wall_topPixel;
+	int 	wall_bottomPixel;
 }				t_ray;
 
 typedef struct s_dda {
@@ -83,24 +86,27 @@ typedef struct s_projection {
 }				t_projection;
 
 typedef struct s_holder {
-	int		is_FaceUp;
-	int		is_FaceDown;
-	int		is_FaceRight;
-	int		is_FaceLeft;
-	int		foundHorz_hit;
-	int		foundVert_hit;
-	float	horzHit_x;
-	float	horzHit_y;
-	float	vertHit_x;
-	float	vertHit_y;
-	float	x_inter;
-	float	y_inter;
-	float	x_step;
-	float	y_step;
-	float	HorzNext_x;
-	float	HorzNext_y;
-	float	VertNext_x;
-	float	VertNext_y;
+	int				is_FaceUp;
+	int				is_FaceDown;
+	int				is_FaceRight;
+	int				is_FaceLeft;
+	int				foundHorz_hit;
+	int				foundVert_hit;
+	float			horzHit_x;
+	float			horzHit_y;
+	float			vertHit_x;
+	float			vertHit_y;
+	float			x_inter;
+	float			y_inter;
+	float			x_step;
+	float			y_step;
+	float			HorzNext_x;
+	float			HorzNext_y;
+	float			VertNext_x;
+	float			VertNext_y;
+	float			x_text;
+	float			y_text;
+	mlx_texture_t	*texture;
 }				t_holder;
 
 typedef struct s_dir {
@@ -131,14 +137,16 @@ typedef struct s_data {
 	t_dda			dda;
 	t_holder		hold;
 	t_projection	project;
-	t_tex			tex;
+	t_tex			text;
 	void			*mlx_ptr;
 	void			*win_ptr;
 	float			r_angle;
 	float			x_tmp;
 	float			y_tmp;
 	int				c;
-	// unsigned int    *Color_buffer;
+	int 			mouse_x;
+	int 			mouse_y;
+	int				tmp;
 }				t_data;
 
 // <========== RAYCASTING ==========>
@@ -161,6 +169,7 @@ int		esc_handle(int keycode, t_data *data);
 
 // colors
 int		generate_color(int r, int g, int b, int a);
+int		get_texture_color(int x_coord, int y_coord, mlx_texture_t *texture);
 
 // moves
 void	ft_move_up(t_data *data);
@@ -170,19 +179,19 @@ void	ft_move_left(t_data *data);
 
 // drawing
 void	drawing(t_data * data);
-void	draw_map2D(t_data *data);
+void	draw_map2d(t_data *data);
 void	draw_carre(int color, float top, float left, t_data *data);
 void	draw_player(float player_x, float player_y, t_data *data);
 void	draw_rays(t_data *data);
 
 // raycast
-void	castAll_rays(t_data *data);
+void	cast_all_rays(t_data *data);
 void	cast_ray(t_data *data, int i);
 void	calculate_dis(t_data *data, int i);
 void	vert_inter(t_data *data, float ray_angle);
 void	horz_inter(t_data *data, float ray_angle);
 void	ft_dda(t_data *data, int xi, int yi, int xf, int yf);
-void	setup_rot_angle(t_data *data);
+void	setup_rot_angle(float *angle);
 int		is_wall(t_data *data, float x, float y);
 
 // projection
@@ -191,23 +200,29 @@ void	generate3D_projection(t_data *data);
 void	draw_floor(t_data *data);
 void	draw_roof(t_data *data);
 
+// textures
+void	draw_texture(t_data *data, int i, int top, int bottom);
+void	find_x_texture(t_data *data, int i, mlx_texture_t *texture);
+void	find_y_texture(t_data *data, mlx_texture_t *texture, int top, int bottom);
+void	setup_texture(t_data *data, int i);
+
 // <========== PARSING ==========>
 
 void	read_map(t_data *data, int fd);
 int		map_valid(t_data *data, int fd, char *file);
 
-//split
+// split
 char	**ftt_split(char const *s, char c);
 int		count_chars(char const *s, char delimiter, int lens);
 int		count_words(char const *s, char delimiter);
 
-//trim
+// trim
 char	*ftt_strtrim(char const *s1, char const *set);
 int		check_end(char const *s, char const *set);
 int		check_start(char const *s, char const *set);
 int		check(char ch, char const *set);
 
-//directions
+// directions
 void	check_many_directions(t_data *data);
 void	print_err_directions();
 void	init_directions(t_data *data);
@@ -256,7 +271,7 @@ int		found_last_0(char *line);
 void	init_f_array(t_data *data);
 void	init_c_array(t_data *data);
 
-//errors
+// errors
 void	check_fd_map(int *fd, char *file);
 void	print_and_exit_param(void);
 void	err_empty_map(void);
@@ -264,15 +279,15 @@ void	found_semicolon_err(void);
 void	err_semicolons(void);
 
 #ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1337
+# define BUFFER_SIZE 1337
 
-//gnl
+// gnl
 char	*get_next_line(int fd);
 char	*ft_read(char *all, int fd);
 char	*cut(char *str);
 char	*copy_to_xyata(char *str);
 
-//libft_needed
+// libft_needed
 char	*ftt_strcpy(char *dst, char *src);
 char	*ftt_strjoin(char *s1, char *s2);
 char	*ftt_strchr(const char *s, int c);

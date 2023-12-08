@@ -6,7 +6,7 @@
 /*   By: mbelouar <mbelouar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 17:23:25 by mbelouar          #+#    #+#             */
-/*   Updated: 2023/11/25 21:29:59 by mbelouar         ###   ########.fr       */
+/*   Updated: 2023/12/07 22:59:07 by mbelouar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 static int	check_wall(t_data *data, float xtmp, float ytmp)
 {
-	int	S;
+	int	tile_s;
 
-	S = data->map_info.square_S;
-	if (data->map_info.map_wt[(int)data->player._y / S][(int)xtmp / S] == '1' ||
-		data->map_info.map_wt[(int)ytmp / S][(int)data->player._x / S] == '1' ||
-		data->map_info.map_wt[(int)ytmp / S][(int)xtmp / S] == '1' )
+	tile_s = data->map_info.square_S;
+	if (data->map_info.map_wt[(int)data->player._y / tile_s]
+		[(int)xtmp / tile_s] == '1'
+		|| data->map_info.map_wt[(int)ytmp / tile_s]
+		[(int)data->player._x / tile_s] == '1'
+		|| data->map_info.map_wt[(int)ytmp / tile_s]
+		[(int)xtmp / tile_s] == '1' )
 		return (0);
 	return (1);
 }
@@ -58,12 +61,37 @@ void	handle_moves(void *param)
 		data->r_angle -= 0.05;
 	if (mlx_is_key_down(data->mlx_ptr, MLX_KEY_RIGHT))
 		data->r_angle += 0.05;
+	mlx_get_mouse_pos(data->mlx_ptr, &data->mouse_x, &data->mouse_y);
+	if (data->mouse_x >= 0 && data->mouse_x <= WIDTH && data->tmp > data->mouse_x && data->mouse_y >= 0 && data->mouse_y <= HEIGHT)
+	{
+		data->r_angle -= 0.05;
+		setup_rot_angle(&data->r_angle);
+		data->tmp = data->mouse_x;
+	}
+	if (data->mouse_x >= 0 && data->mouse_x <= WIDTH && data->tmp < data->mouse_x&& data->mouse_y >= 0 && data->mouse_y <= HEIGHT){
+		data->r_angle += 0.05;
+		setup_rot_angle(&data->r_angle);
+		data->tmp = data->mouse_x;
+	}
+	setup_rot_angle(&data->r_angle);
 	check_and_draw(data);
 }
 
-void	setup_rot_angle(t_data *data)
+// must modify this function to normalize any angle i give it
+// if i wanna use a single angle then just pass the adress of the angle
+// void	setup_rot_angle(t_data *data)
+// {
+// 	data->ray->rayAngle = remainder(data->ray->rayAngle, 2 * M_PI);
+// 	data->r_angle = remainder(data->r_angle, 2 * M_PI);
+// 	if (data->ray->rayAngle < 0)
+// 		data->ray->rayAngle = (2 * M_PI) + data->ray->rayAngle;
+// 	if (data->r_angle < 0)
+// 		data->r_angle = (2 * M_PI) + data->r_angle;
+// }
+
+void	setup_rot_angle(float *angle)
 {
-	data->ray->rayAngle = remainder(data->ray->rayAngle, 2 * M_PI);
-	if (data->ray->rayAngle < 0)
-		data->ray->rayAngle = (2 * M_PI) + data->ray->rayAngle;
+	*angle = remainder(*angle, 2 * M_PI);
+	if (*angle < 0)
+		*angle = (2 * M_PI) + *angle;
 }
