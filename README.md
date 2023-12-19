@@ -105,9 +105,9 @@ While playing, you can use the following keys:
 
 - # **Contact Me**
 
-* [Instagram][_1]
+* [Instagram][ 1]
 
-[_1]: https://www.instagram.com/moelalj/
+[_1]: https://www.instagram.com/moelalj
 
 
 
