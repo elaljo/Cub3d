@@ -104,10 +104,10 @@ While playing, you can use the following keys:
 ![Cub3D Demo](https://i.postimg.cc/MpWDZQms/Screen-Shot-2023-12-13-at-8-23-55-PM.png)
 
 - # **Contact Me**
+ 
+* [Instagram][_2]
 
-* [Instagram][ 1]
-
-[_1]: https://www.instagram.com/moelalj
+[_2]: https://www.instagram.com/moelalj
 
 
 
